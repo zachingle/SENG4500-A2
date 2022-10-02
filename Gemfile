@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 group :test, :development do
+  gem "pry", "~> 0.14.1"
   gem "rake", "~> 13.0"
   gem "rspec", "~> 3.11"
   gem "rubocop", "~> 1.35"
