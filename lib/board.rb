@@ -1,8 +1,8 @@
+# Zachariah Ingle C3349554 SENG4500
 # frozen_string_literal: true
 
 require_relative "ship"
 require_relative "square"
-require "pry"
 
 # A battleship game board
 class Board

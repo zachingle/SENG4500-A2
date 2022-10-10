@@ -1,5 +1,7 @@
+# Zachariah Ingle C3349554 SENG4500
 # frozen_string_literal: true
 
+require "rbconfig"
 require "socket"
 require "timeout"
 require_relative "lib/battleship"
@@ -12,7 +14,8 @@ class Client
     @broadcast_socket = UDPSocket.new
 
     # Allow us to use the same address and port
-    @broadcast_socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEPORT, 1)
+    option = on_windows? ? Socket::SOREUSEADDR : Socket::SO_REUSEPORT
+    @broadcast_socket.setsockopt(Socket::SOL_SOCKET, option, 1)
     @broadcast_socket.bind(address, Integer(port, 10))
 
     random_port = rand(5000..6000)
@@ -93,6 +96,14 @@ class Client
 
     puts "You won!" if @battleship_game.won?
     puts "You lost!" if @battleship_game.lost?
+  end
+
+  private
+
+  def on_windows?
+    os = RbConfig::CONFIG["host_os"]
+
+    os =~ /mingw32/ || os =~ /windows/
   end
 end
 
