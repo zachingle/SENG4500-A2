@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require_relative "board"
+require_relative "ship"
 
 # A battleship game board
 class Battleship

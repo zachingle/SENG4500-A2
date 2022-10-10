@@ -8,7 +8,7 @@ require_relative "lib/battleship"
 
 # A Battleship game client
 class Client
-  def initialize(address: "127.0.0.1", port: "5000")
+  def initialize(address:, port:)
     @battleship_game = Battleship.new
 
     @broadcast_socket = UDPSocket.new
@@ -26,7 +26,7 @@ class Client
     # Broadcast loop
     puts "Listening for 'NEW PLAYER' message"
     loop do
-      msg = Timeout.timeout(5) do
+      msg = Timeout.timeout(29) do
         @broadcast_socket.recvfrom(32)
       end
 
@@ -66,7 +66,7 @@ class Client
 
         while true
           print "Your move: "
-          position = $stdin.gets.chomp
+          position = $stdin.gets.chomp.upcase
 
           break if @battleship_game.inside_board?(position)
 
