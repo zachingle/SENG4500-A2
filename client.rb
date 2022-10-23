@@ -8,6 +8,8 @@ require_relative "lib/battleship"
 
 # A Battleship game client
 class Client
+  BROADCAST_ADDRESS = "255.255.255.255"
+
   def initialize(address:, port:)
     @battleship_game = Battleship.new
 
@@ -16,6 +18,7 @@ class Client
     # Allow us to use the same address and port
     option = on_windows? ? Socket::SOREUSEADDR : Socket::SO_REUSEPORT
     @broadcast_socket.setsockopt(Socket::SOL_SOCKET, option, 1)
+    @broadcast_socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_BROADCAST, 1)
     @broadcast_socket.bind(address, Integer(port, 10))
 
     random_port = rand(5000..6000)
@@ -35,14 +38,14 @@ class Client
 
       puts "Found new player!"
 
-      sender_address = msg[3]
+      sender_address = msg[1][3]
       @other_player = TCPSocket.new(sender_address, sender_port)
       my_turn = false # Player 2
 
       break
     rescue Timeout::Error
       puts "Sending out 'NEW PLAYER' broadcast message"
-      @broadcast_socket.send("NEW PLAYER:#{random_port}", 0, address, port)
+      @broadcast_socket.send("NEW PLAYER:#{random_port}", 0, BROADCAST_ADDRESS, port)
 
       # Probably better of doing this. Wait a second so we don't have to wait till next loop to accept connection
       sleep(1)

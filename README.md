@@ -29,6 +29,8 @@ ruby -v
 ## Battleship Client
 ```sh
 ruby client.rb 127.0.0.1 5000
+# or for local network
+ruby client.rb 0.0.0.0 5000
 ```
 
 Note: If binding to the same broadcast and address port on Windows, automatic detection of the OS might not work and so the #on_windows? method in in the `client.rb` might need to be modified to always return true
